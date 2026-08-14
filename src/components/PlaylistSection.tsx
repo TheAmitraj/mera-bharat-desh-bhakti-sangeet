@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { Play, Pause, Music2, Clock, Sparkles, Youtube, Volume2, Plus, ExternalLink, X, Check } from 'lucide-react';
-import { extractYoutubeVideoId } from '../data/playlist';
+import {
+  Play,
+  Music2,
+  Clock,
+  Youtube,
+  ExternalLink,
+} from 'lucide-react';
 import { Track } from '../types';
 
 interface PlaylistSectionProps {
@@ -10,6 +15,9 @@ interface PlaylistSectionProps {
   onSelectTrack: (index: number) => void;
   showVideo: boolean;
   onToggleVideo: () => void;
+
+  // Kept temporarily so parent component does not throw an error
+  // if it is still passing this prop.
   onAddTrack?: (track: Track) => void;
 }
 
@@ -20,76 +28,51 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
   onSelectTrack,
   showVideo,
   onToggleVideo,
-  onAddTrack,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  const [customTitle, setCustomTitle] = useState<string>('');
-  const [customArtist, setCustomArtist] = useState<string>('');
-  const [customUrl, setCustomUrl] = useState<string>('');
-  const [customCategory, setCustomCategory] = useState<Track['category']>('anthem');
-  const [formError, setFormError] = useState<string | null>(null);
 
   const categories = [
-    { id: 'all', label: 'सभी अमर गीत', count: tracks.length },
-    { id: 'emotional', label: 'शहादत व भावुक', count: tracks.filter(t => t.category === 'emotional').length },
-    { id: 'anthem', label: 'राष्ट्रगान व वंदना', count: tracks.filter(t => t.category === 'anthem').length },
-    { id: 'energetic', label: 'जोश व ऊर्जा', count: tracks.filter(t => t.category === 'energetic').length },
-    { id: 'timeless', label: 'सदाबहार क्लासिक', count: tracks.filter(t => t.category === 'timeless').length },
+    {
+      id: 'all',
+      label: 'सभी अमर गीत',
+      count: tracks.length,
+    },
+    {
+      id: 'emotional',
+      label: 'शहादत व भावुक',
+      count: tracks.filter((t) => t.category === 'emotional').length,
+    },
+    {
+      id: 'anthem',
+      label: 'राष्ट्रगान व वंदना',
+      count: tracks.filter((t) => t.category === 'anthem').length,
+    },
+    {
+      id: 'energetic',
+      label: 'जोश व ऊर्जा',
+      count: tracks.filter((t) => t.category === 'energetic').length,
+    },
+    {
+      id: 'timeless',
+      label: 'सदाबहार क्लासिक',
+      count: tracks.filter((t) => t.category === 'timeless').length,
+    },
   ];
 
-  const filteredTracks = selectedCategory === 'all'
-    ? tracks
-    : tracks.filter((t) => t.category === selectedCategory);
+  const filteredTracks =
+    selectedCategory === 'all'
+      ? tracks
+      : tracks.filter((t) => t.category === selectedCategory);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
+
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  const handleAddCustomSong = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormError(null);
-
-    const videoId = extractYoutubeVideoId(customUrl);
-    if (!videoId) {
-      setFormError('कृपया सही यूट्यूब यूआरएल या वीडियो आईडी दर्ज करें (जैसे https://youtu.be/... या youtube.com/watch?v=...)');
-      return;
-    }
-
-    if (!customTitle.trim()) {
-      setFormError('कृपया गीत का शीर्षक दर्ज करें');
-      return;
-    }
-
-    const newTrack: Track = {
-      id: Date.now(),
-      title: customTitle.trim(),
-      titleEn: customTitle.trim(),
-      movieOrArtist: customArtist.trim() || 'देशभक्ति विशेष',
-      originalSinger: customArtist.trim() || 'विशेष कलाकार',
-      youtubeVideoId: videoId,
-      youtubeUrl: customUrl.trim().startsWith('http') ? customUrl.trim() : `https://www.youtube.com/watch?v=${videoId}`,
-      duration: 240,
-      highlightLyrics: 'वंदे मातरम् • जय हिन्द',
-      lyricsMeaning: 'Custom added patriotic anthem.',
-      category: customCategory,
-      isCustom: true,
-    };
-
-    if (onAddTrack) {
-      onAddTrack(newTrack);
-    }
-
-    // Reset form
-    setCustomTitle('');
-    setCustomArtist('');
-    setCustomUrl('');
-    setIsAddModalOpen(false);
-  };
-
-  const currentActiveTrack = tracks[currentTrackIndex] || tracks[0];
+  const currentActiveTrack =
+    tracks[currentTrackIndex] || tracks[0];
 
   return (
     <section
@@ -101,26 +84,25 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-semibold mb-3">
             <Music2 className="w-3.5 h-3.5" />
-            <span>प्रत्येक गीत का अपना ऑफिशियल यूट्यूब यूआरएल</span>
+
+            <span>
+              प्रत्येक गीत का अपना ऑफिशियल यूट्यूब यूआरएल
+            </span>
           </div>
+
           <h2 className="font-hindi text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             देशभक्ति के सुर
           </h2>
+
           <p className="mt-2 text-sm sm:text-base text-neutral-400 max-w-xl">
             सभी देशभक्ति गीतों के अपने व्यक्तिगत यूट्यूब लिंक्स और वीडियो उपलब्ध हैं।
           </p>
         </div>
 
-        {/* Action buttons */}
+        {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(245,158,11,0.3)] cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>नया यूट्यूब गीत जोड़ें</span>
-          </button>
 
+          {/* Current Video Button */}
           <button
             onClick={onToggleVideo}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-2 border cursor-pointer ${
@@ -130,9 +112,15 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
             }`}
           >
             <Youtube className="w-4 h-4 text-red-500" />
-            <span>{showVideo ? 'वीडियो छिपाएँ' : 'वर्तमान वीडियो देखें'}</span>
+
+            <span>
+              {showVideo
+                ? 'वीडियो छिपाएँ'
+                : 'वर्तमान वीडियो देखें'}
+            </span>
           </button>
 
+          {/* YouTube Link */}
           {currentActiveTrack && (
             <a
               href={currentActiveTrack.youtubeUrl}
@@ -141,118 +129,12 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
               className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium glass-card border border-white/10 text-neutral-300 hover:text-white hover:border-amber-500/40 transition-all flex items-center gap-1.5"
             >
               <span>यूट्यूब पर देखें</span>
+
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           )}
         </div>
       </div>
-
-      {/* Add Custom Song Modal */}
-      {isAddModalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
-          onClick={() => setIsAddModalOpen(false)}
-        >
-          <div
-            className="w-full max-w-lg bg-neutral-900 border border-amber-500/40 rounded-3xl p-6 shadow-2xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-              <div className="flex items-center gap-2">
-                <Youtube className="w-5 h-5 text-red-500" />
-                <h3 className="font-hindi text-lg font-bold text-white">नया यूट्यूब देशभक्ति गीत जोड़ें</h3>
-              </div>
-              <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleAddCustomSong} className="space-y-4">
-              {formError && (
-                <div className="p-3 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-xs">
-                  {formError}
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-                  यूट्यूब वीडियो यूआरएल या आईडी (YouTube Link / ID) *
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. https://www.youtube.com/watch?v=... या youtu.be/..."
-                  value={customUrl}
-                  onChange={(e) => setCustomUrl(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-950 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-                  गीत का नाम (Song Title) *
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. सरफ़रोशी की तमन्ना"
-                  value={customTitle}
-                  onChange={(e) => setCustomTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-950 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-                  कलाकार / फिल्म (Artist / Movie)
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. सोनू निगम • देशभक्ति"
-                  value={customArtist}
-                  onChange={(e) => setCustomArtist(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-950 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-                  श्रेणी (Category)
-                </label>
-                <select
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-950 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-500"
-                >
-                  <option value="anthem">राष्ट्रगान व वंदना (Anthem)</option>
-                  <option value="emotional">शहादत व भावुक (Emotional)</option>
-                  <option value="energetic">जोश व ऊर्जा (Energetic)</option>
-                  <option value="timeless">सदाबहार क्लासिक (Timeless)</option>
-                </select>
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-neutral-400 hover:text-white hover:bg-neutral-800"
-                >
-                  रद्द करें
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-neutral-950 shadow-lg cursor-pointer"
-                >
-                  गीत जोड़ें और बजाएँ
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Category Pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
@@ -267,6 +149,7 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
             }`}
           >
             <span>{cat.label}</span>
+
             <span
               className={`px-1.5 py-0.2 text-[10px] rounded-full font-mono ${
                 selectedCategory === cat.id
@@ -283,9 +166,15 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
       {/* Tracks Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredTracks.map((track) => {
-          const originalIndex = tracks.findIndex((t) => t.id === track.id);
-          const isCurrent = currentTrackIndex === originalIndex;
-          const isTrackPlaying = isCurrent && isPlaying;
+          const originalIndex = tracks.findIndex(
+            (t) => t.id === track.id
+          );
+
+          const isCurrent =
+            currentTrackIndex === originalIndex;
+
+          const isTrackPlaying =
+            isCurrent && isPlaying;
 
           return (
             <div
@@ -298,7 +187,7 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
               }`}
               id={`track-card-${track.id}`}
             >
-              {/* Subtle active glow */}
+              {/* Subtle Active Glow */}
               {isCurrent && (
                 <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
               )}
@@ -306,7 +195,8 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
               {/* Card Top */}
               <div>
                 <div className="flex items-start justify-between gap-3 mb-3">
-                  {/* Track Number / Playing indicator */}
+
+                  {/* Track Number / Playing Indicator */}
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
@@ -324,7 +214,9 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
                       ) : (
                         <Play
                           className={`w-4 h-4 ml-0.5 ${
-                            isCurrent ? 'fill-neutral-950' : 'group-hover:fill-white'
+                            isCurrent
+                              ? 'fill-neutral-950'
+                              : 'group-hover:fill-white'
                           }`}
                         />
                       )}
@@ -333,17 +225,21 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
                     <div>
                       <h3
                         className={`font-hindi text-base sm:text-lg font-bold leading-snug ${
-                          isCurrent ? 'text-amber-300' : 'text-neutral-100 group-hover:text-amber-200'
+                          isCurrent
+                            ? 'text-amber-300'
+                            : 'text-neutral-100 group-hover:text-amber-200'
                         }`}
                       >
                         {track.title}
                       </h3>
+
                       <p className="text-xs text-neutral-400 font-normal truncate max-w-[180px] sm:max-w-[220px]">
                         {track.movieOrArtist}
                       </p>
                     </div>
                   </div>
 
+                  {/* YouTube + Duration */}
                   <div className="flex items-center gap-2">
                     <a
                       href={track.youtubeUrl}
@@ -355,14 +251,16 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
                     >
                       <Youtube className="w-4 h-4 text-red-500 hover:scale-110 transition-transform" />
                     </a>
+
                     <span className="text-xs text-neutral-500 font-mono flex items-center gap-1">
                       <Clock className="w-3 h-3 text-neutral-600" />
+
                       {formatTime(track.duration)}
                     </span>
                   </div>
                 </div>
 
-                {/* Highlight lyrics snippet */}
+                {/* Highlight Lyrics Snippet */}
                 <div className="my-3 p-3 rounded-xl bg-neutral-950/60 border border-white/5">
                   <p className="font-devanagari text-xs text-neutral-300 italic line-clamp-2">
                     "{track.highlightLyrics}"
@@ -375,18 +273,26 @@ export const PlaylistSection: React.FC<PlaylistSectionProps> = ({
                 <span className="font-medium text-neutral-400 truncate max-w-[180px]">
                   {track.originalSinger || 'देशभक्ति विशेष'}
                 </span>
+
                 <div className="flex items-center gap-2">
                   {track.isCustom && (
                     <span className="px-1.5 py-0.2 text-[9px] bg-emerald-500/20 text-emerald-300 rounded border border-emerald-500/30">
                       कस्टम गीत
                     </span>
                   )}
+
                   <span
                     className={`font-semibold transition-colors ${
-                      isCurrent ? 'text-amber-400' : 'text-neutral-500 group-hover:text-neutral-300'
+                      isCurrent
+                        ? 'text-amber-400'
+                        : 'text-neutral-500 group-hover:text-neutral-300'
                     }`}
                   >
-                    {isCurrent ? (isTrackPlaying ? '▶ बज रहा है' : '⏸ थमा हुआ') : 'क्लिक करके बजाएँ'}
+                    {isCurrent
+                      ? isTrackPlaying
+                        ? '▶ बज रहा है'
+                        : '⏸ थमा हुआ'
+                      : 'क्लिक करके बजाएँ'}
                   </span>
                 </div>
               </div>

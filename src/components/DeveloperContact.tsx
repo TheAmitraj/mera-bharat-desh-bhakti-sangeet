@@ -12,23 +12,17 @@ export const DeveloperContact: React.FC<DeveloperContactProps> = ({
   onClose,
   isModal = false,
 }) => {
-  const [copiedEmail, setCopiedEmail] = useState(false);
+ 
 
   const developerInfo = {
     name: 'Amit Raj (अमित राज)',
     handle: 'theamitraj_official',
     instagramUrl: 'https://instagram.com/theamitraj_official',
-    email: 'theamitraj.developer@gmail.com',
+    
     role: 'Creator & Lead Developer',
     description: 'भारत के अमर शहीदों, वीर सैनिकों और राष्ट्रीय गौरव को समर्पित इस मंच का विकास देशभक्ति की भावना और आधुनिक वेब तकनीकों के साथ किया गया है।',
     location: 'India 🇮🇳',
     skills: ['React', 'TypeScript', 'Tailwind CSS', 'Full-Stack Web', 'Creative UI'],
-  };
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(developerInfo.email);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2500);
   };
 
   const cardContent = (
@@ -172,29 +166,6 @@ export const DeveloperContact: React.FC<DeveloperContactProps> = ({
               <span>@{developerInfo.handle}</span>
               <ExternalLink className="w-3 h-3 opacity-80" />
             </a>
-
-            {/* Email Contact & Copy Button */}
-            <div className="flex items-center rounded-xl bg-neutral-800/90 border border-neutral-700/80 p-0.5 text-xs text-neutral-200">
-              <a
-                href={`mailto:${developerInfo.email}`}
-                className="px-3 py-1.5 hover:text-amber-300 flex items-center gap-1.5 transition-colors"
-                title="Send Email"
-              >
-                <Mail className="w-3.5 h-3.5 text-amber-400" />
-                <span className="truncate max-w-[180px] sm:max-w-none">{developerInfo.email}</span>
-              </a>
-              <button
-                onClick={handleCopyEmail}
-                className="p-1.5 hover:bg-neutral-700 rounded-lg text-neutral-400 hover:text-white transition-colors"
-                title="Copy Email"
-              >
-                {copiedEmail ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                ) : (
-                  <Copy className="w-3.5 h-3.5" />
-                )}
-              </button>
-            </div>
           </div>
         </div>
       </div>
