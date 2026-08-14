@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-hindi {
+    font-family: 'Rozha One', 'Tiro Devanagari Hindi', 'Yatra One', serif;
+  }
+  .font-devanagari {
+    font-family: 'Tiro Devanagari Hindi', 'Poppins', sans-serif;
+  }
+  .font-cinzel {
+    font-family: 'Cinzel', serif;
+  }
+  .text-shadow-saffron {
+    text-shadow: 0 0 20px rgba(255, 153, 51, 0.4), 0 0 40px rgba(255, 153, 51, 0.2);
+  }
+  .text-shadow-green {
+    text-shadow: 0 0 20px rgba(19, 136, 8, 0.4), 0 0 40px rgba(19, 136, 8, 0.2);
+  }
+  .glass-card {
+    background: rgba(18, 18, 22, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .glass-player {
+    background: rgba(14, 14, 18, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Ashoka Chakra Slow Rotation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 40s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-slow 60s linear infinite reverse;
+}
+
+/* Tricolor Ambient Pulse */
+@keyframes tricolor-pulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.08);
+  }
+}
+
+.animate-tricolor-pulse {
+  animation: tricolor-pulse 8s ease-in-out infinite;
+}
+
+/* Sound wave animation */
+@keyframes soundbar {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 22px;
+  }
+}
+
+.animate-soundbar-1 { animation: soundbar 0.8s ease-in-out infinite; }
+.animate-soundbar-2 { animation: soundbar 1.1s ease-in-out infinite 0.2s; }
+.animate-soundbar-3 { animation: soundbar 0.7s ease-in-out infinite 0.4s; }
+.animate-soundbar-4 { animation: soundbar 1.3s ease-in-out infinite 0.1s; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}

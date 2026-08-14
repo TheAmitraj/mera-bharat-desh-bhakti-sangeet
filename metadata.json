@@ -1,0 +1,6 @@
+{
+  "name": "Mera Bharat - Desh Bhakti Sangeet",
+  "description": "A cinematic Indian patriotic music platform for 15 August, 26 January, and national celebrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
